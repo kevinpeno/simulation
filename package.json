@@ -1,0 +1,37 @@
+{
+  "name": "expanse",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/simulate.js",
+  "scripts": {
+    "start": "node simulate.js",
+    "test": "blue-tape test/**/*.js",
+    "audit": "nsp check",
+    "precheck": "npm run validate",
+    "check": "npm run audit && npm outdated --depth 0",
+    "clear": "node scripts/clearConsole.js",
+    "cov": "npm run cov:clean && npm run cov:generate",
+    "cov:clean": "rimraf coverage",
+    "cov:generate": "istanbul cover ./node_modules/blue-tape/bin/blue-tape.js test/**/*.js",
+    "init": "rimraf .validate.json && rimraf .jshintrc",
+    "lint": "eslint src test",
+    "validate": "npm run lint && npm test | faucet && npm run cov",
+    "watch": "watch \"npm run watch:runner\" src test",
+    "watch:runner": "npm run clear && npm run validate"
+  },
+  "author": "Kevin Peno <kevinpeno@gmail.com>",
+  "license": "UNLICENSE",
+  "dependencies": {},
+  "devDependencies": {
+    "blue-tape": "latest",
+    "cli-clear": "latest",
+    "eslint": "latest",
+    "faucet": "latest",
+    "isparta": "latest",
+    "istanbul": "latest",
+    "nsp": "latest",
+    "rimraf": "latest",
+    "tap-xunit": "latest",
+    "watch": "latest"
+  }
+}

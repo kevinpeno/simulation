@@ -133,7 +133,7 @@
     "no-self-compare": 1,
     "no-sequences": 2,
     "no-throw-literal": 2,
-    "no-unused-expressions": 2,
+    "no-unused-expressions": 0,
     "no-with": 2,
     "radix": 1,
     "wrap-iife": 2,

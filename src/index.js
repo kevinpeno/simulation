@@ -6,11 +6,15 @@ const simulate = require("./simulate")
 
 const state = {
 	"population": 1,
-	"size": 10
+	"size": 10,
+	"goods": [{
+		"type": "food",
+		"amount": 8
+	}]
 }
 
 const simulation = _.flow([
-	simulate.increasePopIfNotTooLarge
+	simulate.growPopulation
 ])
 const simulator = _.partial(simulate.itWith, simulation)
 

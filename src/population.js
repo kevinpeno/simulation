@@ -8,32 +8,19 @@ function get(state) {
 }
 
 function set(state, value) {
-	return utils.setKeyValue(state, "population", value)
+	return utils.setKeyValue(
+		state,
+		"population",
+		value >= 0 ? value : 0
+	)
 }
 
 function increment(state, value) {
-	const pop = get(state)
-	return set(state, pop + value)
-}
-
-function decrement(state, value) {
-	const pop = get(state)
-	return set(state, pop - value)
-}
-
-function isLessThanZero(data) {
-	return data.population < 0
-}
-
-function isLessThanSize(data) {
-	return data.population < data.size
+	return set(state, get(state) + value)
 }
 
 module.exports = {
 	get,
 	set,
-	increment,
-	decrement,
-	isLessThanSize,
-	isLessThanZero
+	increment
 }

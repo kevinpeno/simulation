@@ -15,80 +15,46 @@ test("Simulation module | runs a supplied function to get an expected outcome", 
 	t.end()
 })
 
-test("Simulation module | increases population when it is not too large", (t) => {
-	const data = {
-		"population": 0,
+test("Simulation module | will return true if size is > population", (t) => {
+	const state = {
+		"population": 1,
 		"size": 2
 	}
-	const result = simulate.increasePopIfNotTooLarge(data)
+	const result = simulate.isSpaceSufficient(state)
 
-	t.equals(result.population, 1)
+	t.true(result)
 	t.end()
 })
 
-test("Simulation module | will never decrease population below 0", (t) => {
-	const data = {
-		"population": -2,
+test("Simulation module | will return true if size is > population", (t) => {
+	const state = {
+		"population": 2,
 		"size": 2
 	}
-	const result = simulate.increasePopIfNotTooLarge(data)
-
-	t.equals(result.population, 0)
-	t.end()
-})
-
-test("Simulation module | will tell me if the state has food goods", (t) => {
-	const data = {
-		"population": 1,
-		"goods": [
-			{
-				"type": "food",
-				"amount": 0
-			}
-		]
-	}
-
-	const result = simulate.hasFood(data)
-	const check = (v) => v.type === "food"
-
-	t.true(result.every(check))
-	t.end()
-})
-
-test("Simulation module | will tell me if the total food in state", (t) => {
-	const data = {
-		"population": 1,
-		"goods": [
-			{
-				"type": "food",
-				"amount": 1
-			}
-		]
-	}
-	const result = simulate.getFood(data)
-
-	t.equals(result, 1)
-	t.end()
-})
-
-test("Simulation module | will return `false` if food is less than population", (t) => {
-	const data = {
-		"population": 1,
-		"goods": [
-			{
-				"type": "food",
-				"amount": 1
-			}
-		]
-	}
-	const result = simulate.isFoodLessThanPopulation(data)
+	const result = simulate.isSpaceSufficient(state)
 
 	t.false(result)
 	t.end()
 })
 
-test("Simulation module | will decrease pop if food is deficient", (t) => {
-	const data = {
+test("Simulation module | will return true if goods.food is > population", (t) => {
+	const state = {
+		"population": 1,
+		"goods": [
+			{
+				"type": "food",
+				"amount": 1
+			}
+		]
+	}
+	const result = simulate.isFoodSufficient(state)
+
+	t.true(result)
+	t.end()
+})
+
+test("Simulation module | will return false if goods.food is > population", (t) => {
+	const state = {
 		"population": 1,
 		"goods": [
 			{
@@ -97,8 +63,88 @@ test("Simulation module | will decrease pop if food is deficient", (t) => {
 			}
 		]
 	}
-	const result = simulate.decreasePopIfMissingFood(data)
+	const result = simulate.isFoodSufficient(state)
 
-	t.equals(result.population, 0)
+	t.false(result)
+	t.end()
+})
+
+test("Simulation module | population cannot grow if there not enough room", (t) => {
+	const state = {
+		"population": 1,
+		"size": 1,
+		"goods": [{
+			"type": "food",
+			"amount": 1
+		}]
+	}
+
+	const results = simulate.canPopGrow(state)
+
+	t.false(results)
+	t.end()
+})
+
+test("Simulation module | population cannot grow if there not enough food", (t) => {
+	const state = {
+		"population": 1,
+		"size": 2,
+		"goods": [{
+			"type": "food",
+			"amount": 0
+		}]
+	}
+
+	const results = simulate.canPopGrow(state)
+
+	t.false(results)
+	t.end()
+})
+
+test("Simulation module | population does not grow by default", (t) => {
+	const state = {
+		"population": 1,
+		"size": 1,
+		"goods": [{
+			"type": "food",
+			"amount": 1
+		}]
+	}
+
+	const results = simulate.growPopulation(state)
+
+	t.equals(results.population, 1)
+	t.end()
+})
+
+test("Simulation module | population grows by one when conditions are met", (t) => {
+	const state = {
+		"population": 1,
+		"size": 2,
+		"goods": [{
+			"type": "food",
+			"amount": 1
+		}]
+	}
+
+	const results = simulate.growPopulation(state)
+
+	t.equals(results.population, 2)
+	t.end()
+})
+
+test("Simulation module | population shrinks by one when there's not enough food", (t) => {
+	const state = {
+		"population": 1,
+		"size": 2,
+		"goods": [{
+			"type": "food",
+			"amount": 0
+		}]
+	}
+
+	const results = simulate.growPopulation(state)
+
+	t.equals(results.population, 0)
 	t.end()
 })

@@ -4,7 +4,7 @@
 const test = require("blue-tape")
 const population = require("../src/population")
 
-test("`get` will return the current population", (t) => {
+test("Population module | `get` will return the current population", (t) => {
 	const result = population.get({
 		"population": 1
 	}, 1)
@@ -13,7 +13,7 @@ test("`get` will return the current population", (t) => {
 	t.end()
 })
 
-test("`set` will return a new state with pop updated to expected value", (t) => {
+test("Population module | `set` will return a new state with pop updated to expected value", (t) => {
 	const result = population.set({
 		"population": 0
 	}, 1)
@@ -22,7 +22,16 @@ test("`set` will return a new state with pop updated to expected value", (t) => 
 	t.end()
 })
 
-test("`increment` will return a new state with pop increased by one", (t) => {
+test("Population module | `set` will prevent population from being set to less than 0", (t) => {
+	const result = population.set({
+		"population": 0
+	}, -1)
+
+	t.equals(result.population, 0)
+	t.end()
+})
+
+test("Population module | `increment` will return a new state with pop increased by one", (t) => {
 	const result = population.increment({
 		"population": 0
 	}, 1)
@@ -31,30 +40,11 @@ test("`increment` will return a new state with pop increased by one", (t) => {
 	t.end()
 })
 
-test("`decrement` will return a new state with pop decrease by one", (t) => {
-	const result = population.decrement({
+test("Population module | `increment` will return a new state with pop decrease by one", (t) => {
+	const result = population.increment({
 		"population": 1
-	}, 1)
+	}, -1)
 
 	t.equals(result.population, 0)
-	t.end()
-})
-
-test("isLessThanZero will return true if pop less than zero", (t) => {
-	const result = population.isLessThanZero({
-		"population": -1
-	})
-
-	t.true(result)
-	t.end()
-})
-
-test("isLessThanMax will return true if pop less than specified", (t) => {
-	const result = population.isLessThanSize({
-		"population": 1,
-		"size": 2
-	})
-
-	t.true(result)
 	t.end()
 })

@@ -2,45 +2,42 @@
 "use strict"
 
 const _ = require("lodash")
+const goods = require("./goods")
 const population = require("./population")
 
 function itWith(executor, state) {
 	return executor(state)
 }
 
-function hasFood(state) {
-	return state.goods.filter((v) => {
-		return v.type === "food"
+function isSpaceSufficient(state) {
+	return population.get(state) < state.size
+}
+
+function isFoodSufficient(state) {
+	return goods.has(state.goods, "food", state.population)
+}
+
+const popValidators = [
+	isSpaceSufficient,
+	isFoodSufficient
+]
+
+const canPopGrow = (state) => {
+	return popValidators.every((v) => {
+		return v(state)
 	})
 }
 
-function getFood(state) {
-	return hasFood(state)
-		.reduce((acc, food) => {
-			return acc + food.amount
-		}, 0)
-}
-
-function isFoodLessThanPopulation(state) {
-	return getFood(state) < state.population
-}
-
-const increasePopIfNotTooLarge = _.cond([
-	[ population.isLessThanZero, _.partialRight(population.set, 0) ],
-	[ population.isLessThanSize, _.partialRight(population.increment, 1) ],
+const growPopulation = _.cond([
+	[canPopGrow, _.partialRight(population.increment, 1)],
+	[_.negate(isFoodSufficient), _.partialRight(population.increment, -1)],
 	[_.stubTrue, _.identity]
-])
-
-const decreasePopIfMissingFood = _.cond([
-	[ isFoodLessThanPopulation, _.partialRight(population.decrement, 1) ],
-	[_.stubTrue, increasePopIfNotTooLarge]
 ])
 
 module.exports = {
 	itWith,
-	increasePopIfNotTooLarge,
-	hasFood,
-	getFood,
-	isFoodLessThanPopulation,
-	decreasePopIfMissingFood
+	isSpaceSufficient,
+	isFoodSufficient,
+	canPopGrow,
+	growPopulation
 }

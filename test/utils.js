@@ -4,7 +4,7 @@
 const test = require("blue-tape")
 const utils = require("../src/utils")
 
-test("setKeyValue will replace the supplied value", (t) => {
+test("Utilities module | setKeyValue will replace the supplied value", (t) => {
 	const state = {
 		"test": 1
 	}
@@ -15,7 +15,7 @@ test("setKeyValue will replace the supplied value", (t) => {
 	t.end()
 })
 
-test("incrementKeyValue will update the supplied value by increment", (t) => {
+test("Utilities module | incrementKeyValue will update the supplied value by increment", (t) => {
 	const state = {
 		"test": 0
 	}

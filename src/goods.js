@@ -31,6 +31,13 @@ function set(state, type, amount) {
 	]))
 }
 
+// function consume(state, type, amount) {
+// 	const good = get(state, type)
+// 	return state.map((v) => {
+// 		return v.type === good.type ? good
+// 	})
+// }
+
 module.exports = {
 	get,
 	set,

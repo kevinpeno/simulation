@@ -25,6 +25,14 @@ test("Goods module | will return a default object when specified good doesn't ex
 	t.end()
 })
 
+test("Goods module | will return a default object when specified good doesn't exist", (t) => {
+	const result = goods.get([], "food")
+
+	t.equals(result.type, "food")
+	t.equals(result.amount, 0)
+	t.end()
+})
+
 test("Goods module | will return true if the specified good has an amount = X", (t) => {
 	const result = goods.has(state, "food", 10)
 

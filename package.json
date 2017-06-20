@@ -33,7 +33,6 @@
     "mocha": "^3.4.2",
     "nsp": "latest",
     "rimraf": "latest",
-    "tap-xunit": "latest",
     "watch": "latest"
   }
 }

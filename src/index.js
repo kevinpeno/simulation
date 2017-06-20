@@ -1,7 +1,7 @@
 /* globals require, setTimeout, console */
 "use strict"
 
-const _ = require("lodash")
+const _ = require("./utils")
 const simulate = require("./simulate")
 
 const state = {

@@ -1,19 +1,12 @@
-/* globals module */
+/* globals module,require */
 "use strict"
 
-function setKeyValue(obj, key, newValue) {
-	return Object.assign({}, obj, {
-		[key]: newValue
-	})
-}
+const _ = require("lodash")
 
-function incrementKeyValue(obj, key, increment) {
-	return Object.assign({}, obj, {
-		[key]: obj[key] + increment
-	})
-}
+const assign = _.partial(_.assign, {})
+const defaults = _.partial(_.defaults, {})
 
-module.exports = {
-	setKeyValue,
-	incrementKeyValue
-}
+module.exports = assign(_, {
+	assign,
+	defaults
+})

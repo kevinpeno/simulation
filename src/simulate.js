@@ -1,7 +1,7 @@
 /* globals module, require */
 "use strict"
 
-const _ = require("lodash")
+const _ = require("./utils")
 const goods = require("./goods")
 const population = require("./population")
 
@@ -17,21 +17,19 @@ function isFoodSufficient(state) {
 	return goods.has(state.goods, "food", state.population)
 }
 
-const popValidators = [
+const canPopGrow = _.overEvery([
 	isSpaceSufficient,
 	isFoodSufficient
-]
-
-const canPopGrow = (state) => {
-	return popValidators.every((v) => {
-		return v(state)
-	})
-}
+])
 
 const growPopulation = _.cond([
 	[canPopGrow, _.partialRight(population.increment, 1)],
 	[_.negate(isFoodSufficient), _.partialRight(population.increment, -1)],
 	[_.stubTrue, _.identity]
+])
+
+const consumeGoods = _.flow([
+	
 ])
 
 module.exports = {

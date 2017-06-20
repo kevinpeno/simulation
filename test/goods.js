@@ -13,7 +13,15 @@ const state = [
 test("Goods module | will return the specified good", (t) => {
 	const result = goods.get(state, "food")
 
-	t.equals(result, state[0])
+	t.deepEquals(result, state[0])
+	t.end()
+})
+
+test("Goods module | will return a default object when specified good doesn't exist", (t) => {
+	const result = goods.get([], "food")
+
+	t.equals(result.type, "food")
+	t.equals(result.amount, 0)
 	t.end()
 })
 
@@ -35,5 +43,11 @@ test("Goods module | will return false if the specified good has an amount < X",
 	const result = goods.has(state, "food", 11)
 
 	t.equals(result, false)
+	t.end()
+})
+
+test("Goods module | can set good amount", (t) => {
+	const results = goods.set(state, "food", 0)
+	t.equals(results[0].amount, 0)
 	t.end()
 })

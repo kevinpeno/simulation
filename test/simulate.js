@@ -148,3 +148,19 @@ test("Simulation module | population shrinks by one when there's not enough food
 	t.equals(results.population, 0)
 	t.end()
 })
+
+test("Simulation module | pops consume food at a 1:1 ratio", (t) => {
+	const state = {
+		"population": 1,
+		"size": 1,
+		"goods": [{
+			"type": "food",
+			"amount": 1
+		}]
+	}
+
+	const results = simulate.consumeGoods(state)
+
+	t.equals(results.food, 0)
+	t.end()
+})

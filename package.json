@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "test": "blue-tape test/**/*.js",
+    "test": "npm run validate",
     "audit": "nsp check",
     "precheck": "npm run validate",
     "check": "npm run audit && npm outdated --depth 0",
@@ -15,7 +15,8 @@
     "cov:generate": "istanbul cover ./node_modules/blue-tape/bin/blue-tape.js test/**/*.js",
     "init": "rimraf .validate.json && rimraf .jshintrc",
     "lint": "eslint src test",
-    "validate": "npm run lint && npm run test | faucet && npm run cov",
+    "validate": "npm run lint && npm run validate:tests | faucet && npm run cov",
+    "validate:tests": "blue-tape test/**/*.js",
     "watch": "watch \"npm run watch:runner\" src test --quiet",
     "watch:runner": "npm run clear && npm run validate"
   },
@@ -24,13 +25,11 @@
   "dependencies": {},
   "devDependencies": {
     "blue-tape": "latest",
-    "chai": "^4.0.2",
     "cli-clear": "latest",
     "eslint": "latest",
     "faucet": "latest",
     "isparta": "latest",
     "istanbul": "latest",
-    "mocha": "^3.4.2",
     "nsp": "latest",
     "rimraf": "latest",
     "watch": "latest"

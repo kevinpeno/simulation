@@ -1,7 +1,7 @@
 /* globals require */
 "use strict"
 
-const test = require("blue-tape")
+const test = require("tape")
 const population = require("../src/population")
 
 test("Population module | `get` will return the current population", (t) => {

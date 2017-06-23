@@ -1,7 +1,7 @@
 /* globals require */
 "use strict"
 
-const test = require("blue-tape")
+const test = require("tape")
 const simulate = require("../src/simulate")
 
 test("Simulation module | runs a supplied function to get an expected outcome", (t) => {
@@ -149,18 +149,18 @@ test("Simulation module | population shrinks by one when there's not enough food
 	t.end()
 })
 
-test("Simulation module | pops consume food at a 1:1 ratio", (t) => {
-	const state = {
-		"population": 1,
-		"size": 1,
-		"goods": [{
-			"type": "food",
-			"amount": 1
-		}]
-	}
+// test("Simulation module | pops consume food at a 1:1 ratio", (t) => {
+// 	const state = {
+// 		"population": 1,
+// 		"size": 1,
+// 		"goods": [{
+// 			"type": "food",
+// 			"amount": 1
+// 		}]
+// 	}
 
-	const results = simulate.consumeGoods(state)
+// 	const results = simulate.consumeGoods(state)
 
-	t.equals(results.food, 0)
-	t.end()
-})
+// 	t.equals(results.food, 0)
+// 	t.end()
+// })

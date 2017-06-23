@@ -1,7 +1,7 @@
 /* globals require */
 "use strict"
 
-const test = require("blue-tape")
+const test = require("tape")
 const goods = require("../src/goods")
 const state = [
 	{
@@ -54,8 +54,8 @@ test("Goods module | will return false if the specified good has an amount < X",
 	t.end()
 })
 
-test("Goods module | can set good amount", (t) => {
-	const results = goods.set(state, "food", 0)
-	t.equals(results[0].amount, 0)
-	t.end()
-})
+// test("Goods module | can set good amount", (t) => {
+// 	const results = goods.set(state, "food", 0)
+// 	t.equals(results[0].amount, 0)
+// 	t.end()
+// })

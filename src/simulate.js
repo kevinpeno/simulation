@@ -28,15 +28,10 @@ const growPopulation = _.cond([
 	[_.stubTrue, _.identity]
 ])
 
-function consumeGoods(state) {
-	return state
-}
-
 module.exports = {
 	itWith,
 	isSpaceSufficient,
 	isFoodSufficient,
 	canPopGrow,
-	growPopulation,
-	consumeGoods
+	growPopulation
 }

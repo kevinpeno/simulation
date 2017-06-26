@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node src/index.js",
     "test": "npm run validate",
+    "test:tape": "tape",
+    "test:faucet": "faucet",
     "audit": "nsp check",
     "precheck": "npm run validate",
     "check": "npm run audit && npm outdated --depth 0",
@@ -17,7 +19,9 @@
   },
   "author": "Kevin Peno <kevinpeno@gmail.com>",
   "license": "UNLICENSE",
-  "dependencies": {},
+  "dependencies": {
+    "lodash": "^4.17.4"
+  },
   "devDependencies": {
     "eslint": "^4.0.0",
     "faucet": "0.0.1",

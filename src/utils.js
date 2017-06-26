@@ -1,12 +1,31 @@
-/* globals module,require */
+/* globals module, require, Infinity */
 "use strict"
 
 const _ = require("lodash")
 
-const assign = _.partial(_.assign, {})
-const defaults = _.partial(_.defaults, {})
+function assign(toAssign, assignee) {
+	return Object.assign({}, assignee, toAssign)
+}
 
-module.exports = assign(_, {
+function set(property, value, assignee) {
+	return assign({
+		[property]: value
+	}, assignee)
+}
+
+function setWith(property, value, customizer, assignee) {
+	return set(
+		property,
+		customizer(value),
+		assignee
+	)
+}
+
+const gt0 = _.partial(Math.max, 0)
+
+module.exports = assign({
 	assign,
-	defaults
-})
+	set,
+	setWith,
+	gt0
+}, _)

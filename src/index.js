@@ -14,7 +14,8 @@ const state = {
 }
 
 const simulation = _.flow([
-	simulate.growPopulation
+	simulate.growPopulation,
+	simulate.consumeFood
 ])
 const simulator = _.partial(simulate.itWith, simulation)
 
@@ -26,7 +27,7 @@ function loop(timer, toRun) {
 		}, timer)
 	}
 
-	return _.partial(run, _, toRun)
+	return _.partialRight(run, toRun)
 }
 
 const programFlow = _.flow([
@@ -37,4 +38,5 @@ const programFlow = _.flow([
 	}
 ])
 
+console.log(state)
 loop(1000, programFlow)(state)

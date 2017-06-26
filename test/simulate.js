@@ -1,6 +1,7 @@
 /* globals require */
 "use strict"
 
+const _ = require("../src/utils")
 const test = require("tape")
 const simulate = require("../src/simulate")
 
@@ -8,10 +9,32 @@ test("Simulation module | runs a supplied function to get an expected outcome", 
 	const state = {
 		"test": false
 	}
-	const simulationStep = state => state
+	const simulationStep = _.identity
 	const result = simulate.itWith(simulationStep, state)
 
 	t.equals(state, result)
+	t.end()
+})
+
+test("Simulation module | will return true if population is > 0", (t) => {
+	const state = {
+		"population": 1,
+		"size": 2
+	}
+	const result = simulate.isPopulationSufficient(state)
+
+	t.true(result)
+	t.end()
+})
+
+test("Simulation module | will return true if population is < 1", (t) => {
+	const state = {
+		"population": 0,
+		"size": 2
+	}
+	const result = simulate.isPopulationSufficient(state)
+
+	t.false(result)
 	t.end()
 })
 
@@ -37,7 +60,7 @@ test("Simulation module | will return true if size is > population", (t) => {
 	t.end()
 })
 
-test("Simulation module | will return true if goods.food is > population", (t) => {
+test("Simulation module | will return true if goods.food is >= population", (t) => {
 	const state = {
 		"population": 1,
 		"goods": [
@@ -53,7 +76,7 @@ test("Simulation module | will return true if goods.food is > population", (t) =
 	t.end()
 })
 
-test("Simulation module | will return false if goods.food is > population", (t) => {
+test("Simulation module | will return false if goods.food is < population", (t) => {
 	const state = {
 		"population": 1,
 		"goods": [
@@ -66,54 +89,6 @@ test("Simulation module | will return false if goods.food is > population", (t) 
 	const result = simulate.isFoodSufficient(state)
 
 	t.false(result)
-	t.end()
-})
-
-test("Simulation module | population cannot grow if there not enough room", (t) => {
-	const state = {
-		"population": 1,
-		"size": 1,
-		"goods": [{
-			"type": "food",
-			"amount": 1
-		}]
-	}
-
-	const results = simulate.canPopGrow(state)
-
-	t.false(results)
-	t.end()
-})
-
-test("Simulation module | population cannot grow if there not enough food", (t) => {
-	const state = {
-		"population": 1,
-		"size": 2,
-		"goods": [{
-			"type": "food",
-			"amount": 0
-		}]
-	}
-
-	const results = simulate.canPopGrow(state)
-
-	t.false(results)
-	t.end()
-})
-
-test("Simulation module | population does not grow by default", (t) => {
-	const state = {
-		"population": 1,
-		"size": 1,
-		"goods": [{
-			"type": "food",
-			"amount": 1
-		}]
-	}
-
-	const results = simulate.growPopulation(state)
-
-	t.equals(results.population, 1)
 	t.end()
 })
 
@@ -146,5 +121,20 @@ test("Simulation module | population shrinks by one when there's not enough food
 	const results = simulate.growPopulation(state)
 
 	t.equals(results.population, 0)
+	t.end()
+})
+
+test("Simulation module | population comsumes food equal to the size of population", (t) => {
+	const state = {
+		"population": 2,
+		"goods": [{
+			"type": "food",
+			"amount": 2
+		}]
+	}
+
+	const results = simulate.consumeFood(state)
+
+	t.equals(results.goods[0].amount, 0)
 	t.end()
 })

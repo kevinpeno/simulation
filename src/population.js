@@ -3,18 +3,14 @@
 
 const _ = require("./utils")
 
-function get(state) {
-	return _.get(state, "population", 0)
+const get = _.partialRight(_.get, "population", 0)
+
+function set(value, state) {
+	return _.setWith("population", value, _.gt0, state)
 }
 
-function set(state, value) {
-	return _.assign(state, {
-		"population": _.max([value, 0])
-	})
-}
-
-function increment(state, value) {
-	return set(state, _.sum([get(state), value]))
+function increment(value, state) {
+	return set(_.sum([get(state), value]), state)
 }
 
 module.exports = {

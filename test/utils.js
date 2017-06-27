@@ -24,6 +24,18 @@ test("Utilities module | can assign without mutating any passed in objects", (t)
 	t.end()
 })
 
+test("Utilities module | can get a property value, data last", (t) => {
+	const results = _.get("test", { "test": true })
+	t.equals(true, results)
+	t.end()
+})
+
+test("Utilities module | can get a property value or default, data last", (t) => {
+	t.true(_.getOr(false, "test", { "test": true }))
+	t.false(_.getOr(false, "test", {}))
+	t.end()
+})
+
 test("Utilities module | can set a property value", (t) => {
 	const toSet = "test"
 	const value = true
@@ -34,22 +46,11 @@ test("Utilities module | can set a property value", (t) => {
 	t.end()
 })
 
-test("Utilities module | can set without mutating assignee", (t) => {
-	const toSet = "test"
-	const value = true
-	const assignee = { "existing": true }
-	_.set(toSet, value, assignee)
-
-	t.false(assignee.test)
-	t.end()
-})
-
 test("Utilities module | can set a property value with a customizer", (t) => {
 	const toSet = "test"
 	const value = 0
 	const customizer = _.partial(Math.max, 1)
-	const assignee = { "existing": true }
-	const results = _.setWith(toSet, value, customizer, assignee)
+	const results = _.setWith(toSet, value, customizer)
 
 	t.equals(results.test, 1)
 	t.end()

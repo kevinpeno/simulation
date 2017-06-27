@@ -18,7 +18,7 @@ function isSpaceSufficient(state) {
 }
 
 function isFoodSufficient(state) {
-	return goods.has("food", state.population, state.goods)
+	return goods.has("food", population.get(state), state.goods)
 }
 
 const canPopGrow = _.overEvery([
@@ -28,19 +28,17 @@ const canPopGrow = _.overEvery([
 ])
 
 const growPopulation = _.cond([
-	[canPopGrow, _.partial(population.increment, 1)],
-	[_.negate(isFoodSufficient), _.partial(population.increment, -1)],
-	[_.stubTrue, _.identity]
+	[canPopGrow, _.partial(population.set, +1)],
+	[_.negate(isFoodSufficient), _.partial(population.set, -1)]
 ])
 
 function consumeFood(state) {
-	return _.assign({
-		"goods": goods.increment(
+	return {
+		"goods": goods.set(
 			"food",
-			_.multiply(-1, population.get(state)),
-			state.goods
+			-population.get(state)
 		)
-	}, state)
+	}
 }
 
 module.exports = {

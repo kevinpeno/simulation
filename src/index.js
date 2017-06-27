@@ -13,7 +13,7 @@ const state = {
 	}]
 }
 
-const simulation = _.flow([
+const simulation = _.over([
 	simulate.growPopulation,
 	simulate.consumeFood
 ])
@@ -38,5 +38,6 @@ const programFlow = _.flow([
 	}
 ])
 
-console.log(state)
-loop(1000, programFlow)(state)
+console.log(JSON.stringify(state))
+// loop(1000, programFlow)(state)
+console.log(JSON.stringify(programFlow(state)))

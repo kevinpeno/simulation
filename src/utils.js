@@ -7,17 +7,17 @@ function assign(toAssign, assignee) {
 	return Object.assign({}, assignee, toAssign)
 }
 
-function set(property, value, assignee) {
-	return assign({
-		[property]: value
-	}, assignee)
+const get = _.rearg(_.get, [1, 0])
+const getOr = _.rearg(_.get, [2, 1, 0])
+
+function set(property, value) {
+	return _.set({}, property, value)
 }
 
-function setWith(property, value, customizer, assignee) {
+function setWith(property, value, customizer) {
 	return set(
 		property,
-		customizer(value),
-		assignee
+		customizer(value)
 	)
 }
 
@@ -25,6 +25,8 @@ const gt0 = _.partial(Math.max, 0)
 
 module.exports = assign({
 	assign,
+	get,
+	getOr,
 	set,
 	setWith,
 	gt0

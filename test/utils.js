@@ -56,3 +56,38 @@ test("Utilities module | can set a property value with a customizer", (t) => {
 	t.end()
 })
 
+test("Utilities module | can flatten an object to one level", (t) => {
+	const nestedObj = {
+		"test": {
+			"test": true
+		}
+	}
+	const results = _.flattenObject(nestedObj)
+
+	t.true(results["test.test"])
+	t.end()
+})
+
+test("Utilities module | returns properties on a state, that are not in the diff, unchanged", (t) => {
+	const state = {
+		"test": 0
+	}
+	const diffs = []
+	const results = _.mergeDiffsToState(diffs, state)
+
+	t.equals(results.test, 0)
+	t.end()
+})
+
+test("Utilities module | can apply positive numerical differences to an object", (t) => {
+	const state = {
+		"test": 0
+	}
+	const diffs = [{
+		"test": 1
+	}]
+	const results = _.mergeDiffsToState(diffs, state)
+
+	t.equals(results.test, 1)
+	t.end()
+})

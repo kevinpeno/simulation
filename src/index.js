@@ -1,4 +1,5 @@
-/* globals require, setTimeout, console */
+// /* globals require, setTimeout, console */
+/* globals require, console */
 "use strict"
 
 const _ = require("./utils")
@@ -20,15 +21,15 @@ const simulation = _.over([
 const simulator = _.partial(simulate.itWith, simulation)
 
 // runtime
-function loop(timer, toRun) {
-	const run = (state) => {
-		setTimeout(() => {
-			run(toRun(state))
-		}, timer)
-	}
+// function loop(timer, toRun) {
+// 	const run = (state) => {
+// 		setTimeout(() => {
+// 			run(toRun(state))
+// 		}, timer)
+// 	}
 
-	return _.partialRight(run, toRun)
-}
+// 	return _.partialRight(run, toRun)
+// }
 
 const programFlow = _.flow([
 	simulator,

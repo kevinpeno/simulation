@@ -44,18 +44,28 @@ const gt0 = _.partial(Math.max, 0)
 
 function mergeDiffsToState(diffs, state) {
 	const cleanDiffs = diffs
-		.map((diff) => flattenObject(diff))
-		.map(_.toPairs)
+		.map(_.flow([
+			_.partial(flattenObject, _, []),
+			_.toPairs
+		]))
 
 	const calculateDiffs = _.flow([
-		_.spread((property, newValue) => [property, newValue, get(property, state)]),
-		_.spread((property, newValue, current) => [property, _.sum([newValue, current])]),
-		_.spread((property, value) => set(property, value))
+		_.spread((property, newValue) => {
+			return [property, newValue, getOr(0, property, state)]
+		}),
+		_.spread((property, newValue, current) => {
+			return [property, _.sum([newValue, current])]
+		}),
+		_.spread((property, value) => {
+			return set(property, _.max([value, 0]))
+		})
 	])
 
 	return _.flatten(cleanDiffs)
 		.map(calculateDiffs)
-		.reduce(_.rearg(assign, [1, 0]), state)
+		.reduce((acc, value) => {
+			return _.merge({}, acc, value)
+		}, state)
 }
 
 module.exports = assign({

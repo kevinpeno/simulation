@@ -3,6 +3,7 @@
 
 const _ = require("./utils")
 const goods = require("./goods")
+const factory = require("./factory")
 const population = require("./population")
 
 function itWith(executor, state) {
@@ -41,6 +42,20 @@ function consumeFood(state) {
 	}
 }
 
+function runFactories(state) {
+	return state.factories.map((productionLine) => {
+		const results = factory.run(productionLine, state.goods)
+		if (results) {
+			return {
+				"goods": results
+			}
+		}
+		else {
+			return {}
+		}
+	})
+}
+
 module.exports = {
 	itWith,
 	isPopulationSufficient,
@@ -48,5 +63,6 @@ module.exports = {
 	isFoodSufficient,
 	canPopGrow,
 	growPopulation,
-	consumeFood
+	consumeFood,
+	runFactories
 }

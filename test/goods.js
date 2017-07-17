@@ -5,9 +5,7 @@ const _ = require("../src/utils")
 const test = require("tape")
 const goods = require("../src/goods")
 const state = {
-	"food": {
-		"amount": 10
-	}
+	"food": 10
 }
 
 test("Goods module | will return the specified good", (t) => {
@@ -16,9 +14,7 @@ test("Goods module | will return the specified good", (t) => {
 })
 
 test("Goods module | will return a default object when specified good doesn't exist", (t) => {
-	t.deepEquals(goods.get("food", {}), {
-		"amount": 0
-	})
+	t.deepEquals(goods.get("food", {}), 0)
 	t.end()
 })
 
@@ -26,7 +22,7 @@ test("Goods module | will return true if the specified good has gte the requeste
 	const equalFood = state
 	const moreFood = _.set(
 		"food",
-		{ "amount": state.food.amount + 1 },
+		state.food + 1,
 		state
 	)
 
@@ -43,6 +39,6 @@ test("Goods module | will return false if the specified good has < the requested
 test("Goods module | will set the amount of goods matching type to the supplied value", (t) => {
 	const results = goods.set("food", 1)
 
-	t.equals(results.food.amount, 1)
+	t.equals(results.food, 1)
 	t.end()
 })

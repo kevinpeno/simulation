@@ -4,30 +4,19 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "test": "npm run validate",
-    "test:tape": "tape",
-    "test:faucet": "faucet",
-    "audit": "nsp check",
-    "precheck": "npm run validate",
-    "check": "npm run audit && npm outdated --depth 0",
-    "clear": "node scripts/clearConsole.js",
-    "validate": "npm run validate:lint && npm run validate:tests",
-    "validate:lint": "eslint src test",
-    "validate:tests": "tape test/**/*.js | faucet",
-    "watch": "watch \"npm run validate\" src test"
+    "build": "rimraf dist && tsc",
+    "test": "tape -r ts-node/register ./src/**/*.test.ts | faucet"
   },
   "author": "Kevin Peno <kevinpeno@gmail.com>",
   "license": "UNLICENSE",
-  "dependencies": {
-    "lodash": "^4.17.4"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "eslint": "^4.0.0",
+    "@types/tape": "^4.2.33",
     "faucet": "0.0.1",
-    "nsp": "^2.6.3",
-    "rimraf": "^2.6.1",
-    "tape": "^4.6.3",
+    "rimraf": "^2.6.3",
+    "tape": "^4.10.1",
+    "ts-node": "^8.0.3",
+    "typescript": "^3.3.3333",
     "watch": "^1.0.2"
   }
 }

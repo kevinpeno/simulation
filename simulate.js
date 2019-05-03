@@ -44,7 +44,7 @@ const makeBabies = (stores) => {
 		: producer(["population", 0])
 }
 
-function simulate(stores, factories) {
+const simulate = (factories) => (stores) => {
 	const processedStores = factories.reduce((stores, factory) => {
 		return stores.concat(factory(stores))
 	}, stores)
@@ -63,6 +63,7 @@ function simulate(stores, factories) {
 	return newStore
 }
 
+// config
 const startingCivCount = 15000
 
 const stores = [
@@ -99,15 +100,15 @@ const factories = [
 
 // runtime
 function loop(timer, toRun) {
-	const run = (state, factories) => {
+	const run = (state) => {
 		setTimeout(() => {
-			const newState = toRun(state, factories)
+			const newState = toRun(state)
 			console.log(newState)
-			run(newState, factories)
+			run(newState)
 		}, timer)
 	}
 
 	return run
 }
 
-loop(1000, simulate)(stores, factories)
+loop(1000, simulate(factories))(stores)

@@ -1,8 +1,9 @@
-/* globals require */
-"use strict"
-
-const run = require("tape")
-const {producer, consumer, factory} = require("../src/index")
+import run from "tape"
+import {
+	producer,
+	consumer,
+	factory,
+} from "../src/index"
 
 run("producers create goods", (test) => {
 	const result = producer([

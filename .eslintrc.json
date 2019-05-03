@@ -1,6 +1,7 @@
 {
-  "env": {
-    "es6": true
+  "parserOptions": {
+    "ecmaVersion": 2017,
+    "sourceType": "module"
   },
   "rules": {
     "no-extra-parens": 0,
@@ -75,7 +76,7 @@
     "max-statements": 0,
     "no-bitwise": 0,
     "no-plusplus": 2,
-    "comma-dangle": [2,"never"],
+    "comma-dangle": [0,"never"],
     "no-cond-assign": [2,"always"],
     "no-console": 1,
     "no-constant-condition": 1,

@@ -2,32 +2,29 @@
   "name": "simulation",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "src/index.js",
   "scripts": {
-    "start": "node simulate.js",
+    "start": "node --experimental-modules simulate.mjs",
     "test": "npm run validate",
     "test:tape": "tape",
     "test:faucet": "faucet",
-    "audit": "nsp check",
     "precheck": "npm run validate",
-    "check": "npm run audit && npm outdated --depth 0",
+    "check": "npm audit && npm outdated --depth 0",
     "clear": "node scripts/clearConsole.js",
     "validate": "npm run validate:lint && npm run validate:tests",
-    "validate:lint": "eslint src test",
-    "validate:tests": "tape test/**/*.js | faucet",
-    "watch": "watch \"npm run validate\" src test"
+    "validate:lint": "eslint src/**/*.mjs test/**/*.mjs",
+    "validate:tests": "node --experimental-modules test/index.mjs | faucet",
+    "watch": "watch \"npm run clear && npm run validate && npm start\" src test"
   },
   "author": "Kevin Peno <kevinpeno@gmail.com>",
   "license": "UNLICENSE",
-  "dependencies": {
-    "lodash": "^4.17.4"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "eslint": "^4.0.0",
+    "cli-clear": "^1.0.4",
+    "eslint": "^5.16.0",
     "faucet": "0.0.1",
-    "nsp": "^2.6.3",
-    "rimraf": "^2.6.1",
-    "tape": "^4.6.3",
+    "tape": "^4.10.1",
     "watch": "^1.0.2"
   }
 }

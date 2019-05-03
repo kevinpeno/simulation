@@ -1,7 +1,4 @@
-/* globals module */
-"use strict"
-
-function producer(good) {
+export function producer(good) {
 	if ( good && good.length ) {
 		return (good[0] instanceof Array) ? good : [good]
 	}
@@ -9,27 +6,20 @@ function producer(good) {
 	return []
 }
 
-function consumer(good) {
+export function consumer(good) {
 	return producer(good)
 		.map(([name, value]) => [name, -value])
 }
 
-function factory(consumes, produces) {
+export function factory(consumes, produces) {
 	return [].concat(
 		consumer(consumes),
 		producer(produces)
 	)
 }
 
-function getStores(property, stores) {
+export function getStores(property, stores) {
 	return stores
 		.filter(([name]) => property === name)
 		.reduce((acc, [, value]) => acc + value, 0)
-}
-
-module.exports = {
-	producer,
-	consumer,
-	factory,
-	getStores,
 }

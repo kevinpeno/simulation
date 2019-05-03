@@ -21,8 +21,15 @@ function factory(consumes, produces) {
 	)
 }
 
+function getStores(property, stores) {
+	return stores
+		.filter(([name]) => property === name)
+		.reduce((acc, [, value]) => acc + value, 0)
+}
+
 module.exports = {
 	producer,
 	consumer,
-	factory
+	factory,
+	getStores,
 }

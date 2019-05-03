@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node simulate.js",
     "test": "npm run validate",
     "test:tape": "tape",
     "test:faucet": "faucet",

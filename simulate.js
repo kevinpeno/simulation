@@ -2,76 +2,57 @@
 /* globals require */
 "use strict"
 
-const {consumer, factory, producer} = require("./src/index")
+const {
+	producer,
+	consumer,
+	factory,
+	getStores,
+} = require("./src/index")
 
-const makeBabies = factory(
-	["food", 1],
-	["population", 1]
-)
+const FOOD_MULTIPLIER = 1.05
+const BABY_MULTIPLIER = 0.01
 
-const feedPopulation = (stores) => {
-	const souls = stores
-		.filter(([name]) => name === "population")
-		.reduce((acc, [, value]) => acc + value, 0)
-	return consumer(["food", souls])
-}
+const feedPopulation = (stores) => consumer([
+	"food",
+	getStores("population", stores)
+])
 
-const workThePopulous = (stores) => {
-	const workers = stores
-		.filter(([name]) => name === "population")
-		.reduce((acc, [, value]) => acc + value, 0)
+const workThePopulous = (stores) =>  producer([
+	"energy",
+	getStores("population", stores)
+])
 
-	return producer(["energy", workers])
+const growFood = (stores) => {
+	const energy = getStores("energy", stores)
+
+	return factory(["energy", energy],["food", Math.floor(energy * FOOD_MULTIPLIER)])
 }
 
 const cullPopulation = (stores) => {
-	const food = stores
-		.filter(([name]) => name === "food")
-		.reduce((acc, [, value]) => acc + value, 0)
+	const food = getStores("food", stores)
 
-	const culledPop = factory(["population", -food], ["food", -food])
-
-	return food <= 0 ? culledPop : [["population", 0]]
+	return food < 0
+		? factory(["population", -food], ["food", -food])
+		: producer(["population", 0])
 }
 
-const workThePopulous = (stores) => {
-	const workers = stores
-		.filter(([name]) => name === "population")
-		.reduce((acc, [, value]) => acc + value, 0)
+const makeBabies = (stores) => {
+	const food = getStores("food", stores)
 
-	return producer(["energy", workers])
+	return food > 0
+		? factory(["food", food], ["population", Math.floor(food * BABY_MULTIPLIER)])
+		: producer(["population", 0])
 }
-
-const stores = [
-	["energy", 0],
-	["food", 20],
-	["population", 20]
-]
-
-const factories = [
-	workThePopulous,
-	feedPopulation,
-	makeBabies,
-	cullPopulation,
-	growFood
-]
 
 function simulate(stores, factories) {
-	const diffs = factories.map((factory) => {
-		if ( factory instanceof Function ) {
-			return factory(stores)
-		}
+	const processedStores = factories.reduce((stores, factory) => {
+		return stores.concat(factory(stores))
+	}, stores)
 
-		return factory
-	})
-
-	const flattenedStores = [].concat(stores, ...diffs)
-
-	const newStoresObj = flattenedStores.reduce((stores, [name, value]) => {
+	const newStoresObj = processedStores.reduce((stores, [name, value]) => {
 		return Object.assign({}, stores, {
 			[name]: (stores[name] ? (stores[name] + value) : value)
-		})
-	}, {})
+	})}, {})
 
 	const newStore = []
 
@@ -82,48 +63,51 @@ function simulate(stores, factories) {
 	return newStore
 }
 
-const round1 = simulate(stores, factories)
-const round2 = simulate(round1, factories)
-const round3 = simulate(round2, factories)
-const round4 = simulate(round3, factories)
-const round5 = simulate(round4, factories)
+const startingCivCount = 15000
 
-round5
-debugger
+const stores = [
+	["energy", 0],
+	["food", startingCivCount],
+	["population", startingCivCount]
+]
 
-// const simulation = _.over([
-// 	simulate.growPopulation,
-// 	simulate.consumeFood,
-// 	simulate.runFactories
-// ])
-// const simulator = _.partial(simulate.itWith, simulation)
+const factories = [
+	feedPopulation,
+	workThePopulous,
+	growFood,
+	cullPopulation,
+	makeBabies,
+]
+
+// console.log(stores)
+
+// const round1 = simulate(stores, factories)
+// console.log(round1)
+
+// const round2 = simulate(round1, factories)
+// console.log(round2)
+
+// const round3 = simulate(round2, factories)
+// console.log(round3)
+
+// const round4 = simulate(round3, factories)
+// console.log(round4)
+
+// const round5 = simulate(round4, factories)
+// console.log(round5)
+// debugger
 
 // runtime
-// function loop(timer, toRun) {
-// 	const run = (state) => {
-// 		setTimeout(() => {
-// 			run(toRun(state))
-// 		}, timer)
-// 	}
+function loop(timer, toRun) {
+	const run = (state, factories) => {
+		setTimeout(() => {
+			const newState = toRun(state, factories)
+			console.log(newState)
+			run(newState, factories)
+		}, timer)
+	}
 
-// 	return _.partialRight(run, toRun)
-// }
+	return run
+}
 
-// function programFlow(state) {
-// 	return _.flow([
-// 		simulator,
-// 		_.flatten,
-// 		(diffs) => {
-// 			console.log(diffs)
-// 			return diffs
-// 		},
-// 		_.partialRight(_.mergeDiffsToState, state),
-// 		(state) => {
-// 			console.log(state)
-// 			return state
-// 		}
-// 	])(state)
-// }
-
-// console.log(state)
-// loop(1000, programFlow)(state)
+loop(1000, simulate)(stores, factories)
